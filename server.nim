@@ -1,23 +1,5 @@
 import asynchttpserver, asyncdispatch
-
-
-type
-  Route = ref object of RootObj
-    path: string
-    body: string
-
-var
-  Routes: seq[Route] = @[]
-
-Routes.add(Route(
-  body: "home",
-  path: "/"
-))
-Routes.add(Route(body: "test", path: "/test"))
-
-# for k, v in Routes:
-#   echo v.body, v.path
-
+import routes
 
 var server = newAsyncHttpServer()
 proc cb(req: Request) {.async.} =
