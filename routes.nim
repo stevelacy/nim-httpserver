@@ -8,7 +8,7 @@ var
   Routes*: seq[Route] = @[]
 
 Routes.add(Route(
-  body: "home",
+  body: readFile("views/index.html"),
   path: "/"
 ))
 Routes.add(Route(body: "test", path: "/test"))
