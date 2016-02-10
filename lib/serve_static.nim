@@ -1,11 +1,11 @@
-import os, strutils, asynchttpserver, asyncdispatch, mimetypes, strtabs
+import os, asynchttpserver, asyncdispatch, mimetypes, strtabs
 import lib/headers
 
 proc serveStatic*(req: Request, root: string = "./") {.async.} =
   echo req.reqMethod, " ", req.url.path
-  let path = "$1/$2" % [root, req.url.path]
-
-  let mimetype = getMimetype(newMimeTypes(), replace(splitFile(path).ext, ".", ""))
+  let path = root & "/" & req.url.path
+  let ext = splitFile(path).ext[1 .. splitFile(path).ext.len-1]
+  let mimetype = getMimetype(newMimeTypes(), ext)
 
   if existsFile(path):
     try:
@@ -16,6 +16,6 @@ proc serveStatic*(req: Request, root: string = "./") {.async.} =
       echo "io error"
     await req.respond(Http500, "Error")
   else:
-    let msg = "Can't $1 $2 " % [req.reqMethod, req.url.path]
+    let msg = "Can't " & req.reqMethod & " " & req.url.path
     await req.respond(Http404, msg)
 
