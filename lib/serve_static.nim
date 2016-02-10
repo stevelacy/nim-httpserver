@@ -1,9 +1,9 @@
 import os, strutils, asynchttpserver, asyncdispatch, mimetypes, strtabs
 import lib/headers
 
-proc serveStatic*(req: Request) {.async.} =
+proc serveStatic*(req: Request, root: string = "./") {.async.} =
   echo req.reqMethod, " ", req.url.path
-  let path = "./$1" % req.url.path
+  let path = "$1/$2" % [root, req.url.path]
 
   let mimetype = getMimetype(newMimeTypes(), replace(splitFile(path).ext, ".", ""))
 
